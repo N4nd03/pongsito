@@ -1,0 +1,95 @@
+document.addEventListener("DOMContentLoaded", function() {
+  const paddle1 = document.getElementById("paddle1");
+  const paddle2 = document.getElementById("paddle2");
+  const ball = document.getElementById("ball");
+  const pong = document.getElementById("pong");
+  const pongHeight = pong.clientHeight;
+  const pongWidth = pong.clientWidth;
+  let ballX = pongWidth / 2;
+  let ballY = pongHeight / 2;
+  let ballSpeedX = 2;
+  let ballSpeedY = 2;
+
+  let paddle1Y = pongHeight / 2 - 35; // Inicialmente centrado
+  let paddle2Y = pongHeight / 2 - 35; // Inicialmente centrado
+  const paddleSpeed = 5;
+
+  let player1Score = 0;
+  let player2Score = 0;
+
+  const player1ScoreDisplay = document.getElementById("player1Score");
+  const player2ScoreDisplay = document.getElementById("player2Score");
+
+  function update() {
+    // Movimiento de la bola
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+    // Colisión con los bordes superior e inferior
+    if (ballY >= pongHeight || ballY <= 0) {
+      ballSpeedY = -ballSpeedY;
+    }
+
+    // Colisión con los paddles y actualización del marcador
+    if (ballX <= 20) {
+      if (ballY >= paddle1Y && ballY <= paddle1Y + 70) {
+        ballSpeedX = -ballSpeedX;
+      } else {
+        player2Score++;
+        player2ScoreDisplay.textContent = player2Score;
+        reset();
+      }
+    } else if (ballX >= pongWidth - 30) {
+      if (ballY >= paddle2Y && ballY <= paddle2Y + 70) {
+        ballSpeedX = -ballSpeedX;
+      } else {
+        player1Score++;
+        player1ScoreDisplay.textContent = player1Score;
+        reset();
+      }
+    }
+
+    // Actualizar posición de la bola
+    ball.style.left = ballX + "px";
+    ball.style.top = ballY + "px";
+
+    // Actualizar posición de los paddles
+    paddle1.style.top = paddle1Y + "px";
+    paddle2.style.top = paddle2Y + "px";
+  }
+
+  function reset() {
+    ballX = pongWidth / 2;
+    ballY = pongHeight / 2;
+    ballSpeedX = -ballSpeedX;
+    ballSpeedY = Math.random() > 0.5 ? 2 : -2;
+  }
+
+  // Restablecer el marcador y la posición de la bola al inicio
+  reset();
+
+  // Control de los paddles con eventos táctiles
+  let startY;
+  pong.addEventListener("touchstart", function(event) {
+    startY = event.touches[0].clientY;
+  });
+
+  pong.addEventListener("touchmove", function(event) {
+    event.preventDefault();
+    let deltaY = event.touches[0].clientY - startY;
+
+    // Control del paddle1
+    if (event.touches[0].clientX < pongWidth / 2 && paddle1Y + deltaY > 0 && paddle1Y + deltaY < pongHeight - 70) {
+      paddle1Y += deltaY;
+    }
+
+    // Control del paddle2
+    if (event.touches[0].clientX > pongWidth / 2 && paddle2Y + deltaY > 0 && paddle2Y + deltaY < pongHeight - 70) {
+      paddle2Y += deltaY;
+    }
+
+    startY = event.touches[0].clientY;
+  });
+
+  setInterval(update, 1000 / 60); // Update game 60 times per second
+});
