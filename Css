@@ -1,0 +1,54 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#pong {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: lightgoldenrodyellow;
+}
+
+#paddle1, #paddle2 {
+  position: absolute;
+  width: 10px;
+  height: 70px;
+  background-color: indianred;
+}
+
+#paddle1 {
+  left: 10px;
+}
+
+#paddle2 {
+  right: 10px;
+}
+
+#ball {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: goldenrod;
+}
+
+#score {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  color: darkred;
+}
+
+#player1Score, #player2Score {
+  display: inline-block;
+  padding: 0 10px;
+}
+
+#player1Score::before, #player2Score::before {
+  content: "0";
+}
